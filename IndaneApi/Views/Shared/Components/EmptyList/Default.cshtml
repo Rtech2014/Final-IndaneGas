@@ -1,0 +1,92 @@
+﻿@model IEnumerable<IndaneApi.Models.Empty>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h4 class="text-muted">Empty Cylinder report</h4>
+@await Component.InvokeAsync("EmptyCylinder")
+<table class="table table-responsive table-primary table-hover" id="emptytable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryPersonDetail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeStamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.In_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmptyNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewConnection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmptyPending)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnedFull)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CashToBeRecevied)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CashRecevied)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceviedBalance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryPersonDetail.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.In_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmptyNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewConnection)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmptyPending)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnedFull)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CashToBeRecevied)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CashRecevied)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReceviedBalance)
+                </td>
+                @*<td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+

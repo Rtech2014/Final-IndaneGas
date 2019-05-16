@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Full Cylinder</h3>
+            <div class="form-group">
+                <select id="deliveryboyid" class="form-control">
+                    <option>Please Select Delivery boy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="productid" class="form-control">
+                    <option>Please Select Product</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input id="FullCount" placeholder="Full Count" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <select id="OutNo" class="form-control">
+                    <option>Select the no of takes</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </div>
+            @*<div class="form-group">
+                <input id="Cashbal" placeholder="Cash Balance" type="number" class="form-control" />
+            </div>*@
+            <button type="submit" id="cylinderfull"  class="btn btn-primary btn-block">Submit</button>
+        </div>
+        <div class="col-md-8">
+            <h3>Empty Cylinder</h3>
+            <div class="form-row">
+                <div class="col">
+                    <select id="edeliveryboyid" class="form-control">
+                        <option>Please Select Delivery boy</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select id="eproductid" class="form-control">
+                        <option>Please Select Products</option>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="form-row">
+                <div class="col">
+                    <select id="in_No" class="form-control">
+                        <option>Select the no of In takes</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <input id="emptyNo" placeholder="Sales Count" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <input id="newConnection" placeholder="New Connection" class="form-control" />
+                </div>
+                <div class="col">
+                    <input id="emptyPending" placeholder="Empty Pending" class="form-control" />
+                </div>
+            </div>
+            <br />
+
+            <div class="form-row">
+                <div class="col">
+                    <input id="returnedFull" placeholder="Returned Full" class="form-control" />
+                </div>
+                <div class="col">
+                    <input id="cashRecevied" placeholder="Cash Received" class="form-control" />
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <input type="submit" id="cylinderempty" value="Submit" class="btn btn-primary btn-block" />
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <a href="" class="btn btn-dark" id="refreshempty">Refresh</a>
+        <div class="col-md-12" id="myComponentContainer">
+            @await Component.InvokeAsync("EmptyList")
+        </div>
+
+        <div class="col-md-12" id="myfullComponentContainer">
+            @await Component.InvokeAsync("FullList")
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            //AddData();
+
+            $('#fulltable').DataTable();
+
+            $('#emptytable').DataTable();
+
+            $('#cylinderempty').click(function () {
+                console.log("Entered");
+                var edeliveryboy = $("#edeliveryboyid").val();
+                console.log(edeliveryboy)
+                var eproductId = $("#eproductid").val();
+                var in_No = $("#in_No").val();
+                var emptyNo = $("#emptyNo").val();
+                var newConnection = $("#newConnection").val();
+                var emptyPending = $("#emptyPending").val();
+                var returnedFull = $("#returnedFull").val();
+                var cashRecevied = $("#cashRecevied").val();
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "api/Empties",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(
+                        {
+                            ProductId: eproductId,
+                            DeliveryPersonId: edeliveryboy,
+                            In_No: in_No,
+                            NewConnection: newConnection,
+                            EmptyNo: emptyNo,
+                            EmptyPending: emptyPending,
+                            ReturnedFull: returnedFull,
+                            CashRecevied: cashRecevied,
+                        }),
+                    contentType: "appliction/json",
+                    success: function (result) {
+                        console.log("suceeded " + result)
+                        console.log("Hello");
+                        alert(result);
+                        var container = $("#myComponentContainer");
+                        var refreshComponent = function () {
+                            console.log('hello')
+                            $.get("/Home/MyEmptyComponent", function (data) { container.html(data); });
+                            var data = $.get("/Home/MyEmptyComponent", function (data) { container.html(data); });
+                            console.log(data);
+                        };
+                        refreshComponent();
+                        clearDataEmpty();
+                    },
+                    error: function (response) {
+                        alert("Please check the cash recevied or wrong entry ");
+                    }
+                })
+            });
+            $('#refreshempty').click(function () {
+                var container = $("#myComponentContainer");
+                var refreshComponent = function () {
+                    console.log('hello')
+                    $.get("/Home/MyEmptyComponent", function (data) { container.html(data); });
+                    var data = $.get("/Home/MyEmptyComponent", function (data) { container.html(data); });
+                    console.log(data);
+                };
+                refreshComponent();
+            });
+            function clearDataEmpty() {
+                 $("#in_No").val("");
+                 $("#emptyNo").val("");
+                 $("#newConnection").val("");
+                 $("#emptyPending").val("");
+                 $("#returnedFull").val("");
+                $("#cashRecevied").val("");
+            }
+
+            function clearDataFull() {
+                console.log("Hello Empty boy")
+                $("#FullCount").val(""); 
+                $("#OutNo").val(""); 
+            }
+
+            $('#cylinderfull').click(function () {
+                var deliveryboy = $("#deliveryboyid").val();
+                var productId = $("#productid").val();
+                var fullCount = $("#FullCount").val();
+                var outNo = $("#OutNo").val();
+                var cashBal = $("#Cashbal").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "api/Fulls",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(
+                        {
+                            ProductId: productId,
+                            DeliveryPersonId: deliveryboy,
+                            FullCount: fullCount,
+                            Out_No: outNo,
+                            CashToBeRecevied: cashBal
+                        }),
+                    contentType: "appliction/json",
+                    success: function (result) {
+                        //AddData();
+                        alert(result);
+                        var fcontainer = $("#myfullComponentContainer");
+                        var fullrefreshComponent = function () {
+                            $.get("/Home/MyFullComponent", function (data) { fcontainer.html(data); });
+                            var data = $.get("/Home/MyFullComponent", function (data) { fcontainer.html(data); });
+                        };
+                        fullrefreshComponent();
+                        //clearDataFull();
+                         $("#deliveryboyid").val("Select");
+                    },
+                    error: function (result) {
+                        alert("Please Enter correct values or entry exists");
+                    }
+                })
+            });
+
+
+            GetDeliveryboyData();
+
+            function GetDeliveryboyData() {
+                var options = {};
+                options.url = "/Home/GetDelivoryBoyData";
+                options.type = "GET";
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        console.log(element);
+                        $("#deliveryboyid").append("<option value = " + element.id + ">"
+                            + element.name + "</option>");
+                        $("#edeliveryboyid").append("<option value = " + element.id + ">"
+                            + element.name + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while making Ajax call!");
+                };
+                $.ajax(options);
+            }
+
+            GetProductData();
+
+            function GetProductData() {
+                var options = {};
+                options.url = "/Home/GetProducts";
+                options.type = "GET";
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        console.log(element);
+                        $("#productid").append("<option value = " + element.id + ">"
+                            + element.name + "</option>");
+                        $("#eproductid").append("<option value = " + element.id + ">"
+                            + element.name + "</option>");
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while making Ajax call!");
+                };
+                $.ajax(options);
+            }
+        });
+    </script>
+}

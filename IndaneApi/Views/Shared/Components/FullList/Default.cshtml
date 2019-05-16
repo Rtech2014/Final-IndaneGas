@@ -1,0 +1,56 @@
+﻿@model IEnumerable<IndaneApi.Models.Full>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="text-muted">Full Cylinder report</h4> @await Component.InvokeAsync("FullCylinder")
+<table class="table table-primary table-hover" id="fulltable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryPersonDetail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeStamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Out_No)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryPersonDetail.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Out_No)
+                </td>
+
+                @*<td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
